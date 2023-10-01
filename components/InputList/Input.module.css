@@ -1,0 +1,39 @@
+
+.root {
+  margin-bottom: 10px; /* Add margin between IP inputs */
+}
+
+.label {
+  font-weight: bold;
+  margin-bottom: 5px;
+}
+
+.input {
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  width: 100%;
+  font-size: 14px;
+}
+
+/* Add styles for different sizes if needed */
+.small {
+  font-size: 12px;
+  padding: 6px;
+}
+
+.removeButton {
+  background-color: #ff5555;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  padding: 6px 10px;
+  margin-left: 5px; /* Adjust the margin as needed */
+  cursor: pointer;
+}
+
+.removeButton:hover {
+  background-color: #ff0000; /* Change color on hover if desired */
+}
+
+/* Add more styles as needed */

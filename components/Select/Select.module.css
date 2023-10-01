@@ -1,0 +1,48 @@
+/* Your CSS file or style block */
+
+/* Style the select element */
+.select {
+  width: 100%; /* Set the width as needed */
+  padding: 10px;
+  font-size: 16px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  background-color: #fff;
+  cursor: pointer;
+  outline: none; /* Remove the default outline on focus */
+}
+
+/* Style the dropdown arrow icon (customizable) */
+.select::after {
+  content: '\25BC'; /* Unicode character for a down arrow */
+  position: absolute;
+  top: 50%;
+  right: 10px;
+  transform: translateY(-50%);
+  pointer-events: none; /* Prevent the icon from being clickable */
+}
+
+/* Style the selected option */
+.select option[selected] {
+  background-color: #007bff; /* Change the background color of the selected option */
+  color: #fff; /* Change the text color of the selected option */
+}
+
+/* Style the options dropdown */
+.select:focus {
+  border-color: #007bff; /* Change the border color on focus */
+  box-shadow: 0 0 5px rgba(0, 123, 255, 0.5); /* Add a subtle box shadow on focus */
+}
+
+/* Style the options within the dropdown */
+.select option {
+  padding: 10px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background-color 0.2s, color 0.2s;
+}
+
+/* Style the options on hover */
+.select option:hover {
+  background-color: #f0f0f0; /* Change the background color on hover */
+}

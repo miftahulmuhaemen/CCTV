@@ -1,5 +1,5 @@
 import { ValidateProps } from '@/api-lib/constants';
-import { findUserByEmail, findUserByUsername, insertUser } from '@/api-lib/db';
+import { findUserByEmail, findUserByUsername, insertUser, findUsers } from '@/api-lib/db';
 import { auths, validateBody } from '@/api-lib/middlewares';
 import { getMongoDb } from '@/api-lib/mongodb';
 import { ncOpts } from '@/api-lib/nc';
@@ -10,6 +10,16 @@ import normalizeEmail from 'validator/lib/normalizeEmail';
 
 const handler = nc(ncOpts);
 
+handler.get(async (req, res) => {
+  const db = await getMongoDb();
+  const users = await findUsers(
+    db,
+    req.query.limit ? parseInt(req.query.limit, 10) : undefined
+  );
+
+  res.json({ users });
+});
+
 handler.post(
   validateBody({
     type: 'object',
@@ -18,15 +28,16 @@ handler.post(
       name: ValidateProps.user.name,
       password: ValidateProps.user.password,
       email: ValidateProps.user.email,
+      role: ValidateProps.user.role,
     },
-    required: ['username', 'name', 'password', 'email'],
+    required: ['username', 'name', 'password', 'email', 'role'],
     additionalProperties: false,
   }),
   ...auths,
   async (req, res) => {
     const db = await getMongoDb();
 
-    let { username, name, email, password } = req.body;
+    let { username, name, email, password, role } = req.body;
     username = slugUsername(req.body.username);
     email = normalizeEmail(req.body.email);
     if (!isEmail(email)) {
@@ -53,6 +64,7 @@ handler.post(
       bio: '',
       name,
       username,
+      role,
     });
     req.logIn(user, (err) => {
       if (err) throw err;

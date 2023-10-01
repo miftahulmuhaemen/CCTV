@@ -2,9 +2,101 @@ import bcrypt from 'bcryptjs';
 import { ObjectId } from 'mongodb';
 import normalizeEmail from 'validator/lib/normalizeEmail';
 
+export async function findUsers(db, limit = 10) {
+  return db
+  .collection('users')
+  .aggregate([
+    { $limit: limit },
+    {
+      $lookup: {
+        from: 'roles',
+        localField: 'role',
+        foreignField: '_id',
+        as: 'role',
+      },
+    },
+    { $unwind: { 
+        path: "$role",
+        preserveNullAndEmptyArrays: true
+      },
+    },
+    { $addFields: { floorAccess: "$role.floorAccess" } },
+    { $project: { "role.floorAccess": 0 } },
+  ])
+  .toArray();
+}
+
+export async function findFloorsByUsername(db, username) {
+  return db
+  .collection('users')
+  .aggregate([
+    { $match: { username } },
+    {
+      $lookup: {
+        from: 'roles',
+        localField: 'role',
+        foreignField: '_id',
+        as: 'role',
+      },
+    },
+    { $unwind: { 
+        path: "$role",
+        preserveNullAndEmptyArrays: false
+      },
+    },
+    { $addFields: { floorAccess: "$role.floorAccess" } },
+    { $unwind: { 
+        path: "$floorAccess",
+        preserveNullAndEmptyArrays: false
+      },
+    },
+    {
+      $lookup: {
+        from: "floors",
+        localField: "floorAccess",
+        foreignField: "_id",
+        as: "floor",
+      },
+    },
+    { $unwind: { 
+        path: "$floor",
+        preserveNullAndEmptyArrays: false
+      },
+    },
+    { $addFields: { cameraIPs: '$floor.cameraIPs' } },
+    { $unset: ['password', 'bio', 'floorAccess', 'floor.cameraIPs', 'role.floorAccess'] },
+  ])
+  .toArray();
+}
+
 export async function findUserWithEmailAndPassword(db, email, password) {
   email = normalizeEmail(email);
-  const user = await db.collection('users').findOne({ email });
+  const users = await db
+  .collection('users')
+  .aggregate([
+    { $match: { email } },
+    {
+      $lookup: {
+        from: 'roles',
+        localField: 'role',
+        foreignField: '_id',
+        as: 'role',
+      },
+    },
+    { $unwind: { 
+        path: "$role",
+        preserveNullAndEmptyArrays: true
+      },
+    },
+    { $addFields: { floorAccess: "$role.floorAccess" } },
+    { $project: { "role.floorAccess": 0 } },
+  ])
+  .toArray();
+
+  if (!users)
+    return null;
+
+  const user = users[0];
   if (user && (await bcrypt.compare(password, user.password))) {
     return { ...user, password: undefined }; // filtered out password
   }
@@ -12,10 +104,31 @@ export async function findUserWithEmailAndPassword(db, email, password) {
 }
 
 export async function findUserForAuth(db, userId) {
-  return db
-    .collection('users')
-    .findOne({ _id: new ObjectId(userId) }, { projection: { password: 0 } })
-    .then((user) => user || null);
+  const users = await db
+  .collection('users')
+  .aggregate([
+    { $match: { _id: userId } },
+    {
+      $lookup: {
+        from: 'roles',
+        localField: 'role',
+        foreignField: '_id',
+        as: 'role',
+      },
+    },
+    { $unwind: { 
+        path: "$role",
+        preserveNullAndEmptyArrays: true
+      },
+    },
+    { $addFields: { floorAccess: "$role.floorAccess" } },
+    { $project: { "role.floorAccess": 0 } },
+  ])
+  .toArray();
+
+  if (!users)
+    return null;
+  return users[0];
 }
 
 export async function findUserById(db, userId) {
@@ -53,7 +166,7 @@ export async function updateUserById(db, id, data) {
 
 export async function insertUser(
   db,
-  { email, originalPassword, bio = '', name, profilePicture, username }
+  { email, originalPassword, bio = '', name, profilePicture, username, role }
 ) {
   const user = {
     emailVerified: false,
@@ -62,6 +175,7 @@ export async function insertUser(
     name,
     username,
     bio,
+    role: new ObjectId(role),
   };
   const password = await bcrypt.hash(originalPassword, 10);
   const { insertedId } = await db

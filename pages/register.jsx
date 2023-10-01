@@ -1,15 +1,15 @@
 import { SignUp } from '@/page-components/Auth';
 import Head from 'next/head';
 
-const SignupPage = () => {
+const RegisterPage = () => {
   return (
     <>
       <Head>
-        <title>Sign up</title>
+        <title>Register</title>
       </Head>
       <SignUp />
     </>
   );
 };
 
-export default SignupPage;
+export default RegisterPage;

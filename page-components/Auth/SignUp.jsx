@@ -1,9 +1,10 @@
 import { Button } from '@/components/Button';
 import { Input } from '@/components/Input';
 import { Container, Spacer, Wrapper } from '@/components/Layout';
-import { TextLink } from '@/components/Text';
+import { Select } from '@/components/Select';
 import { fetcher } from '@/lib/fetch';
 import { useCurrentUser } from '@/lib/user';
+import { useRolesPages } from '@/lib/roles';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useCallback, useRef, useState } from 'react';
@@ -15,6 +16,12 @@ const SignUp = () => {
   const passwordRef = useRef();
   const usernameRef = useRef();
   const nameRef = useRef();
+  const roleRef = useRef();
+
+  const { data, size, setSize, isLoadingMore, isReachingEnd } = useRolesPages();
+  const roles = data
+    ? data.reduce((acc, val) => [...acc, ...val.roles], [])
+    : [];
 
   const { mutate } = useCurrentUser();
 
@@ -35,11 +42,12 @@ const SignUp = () => {
             name: nameRef.current.value,
             password: passwordRef.current.value,
             username: usernameRef.current.value,
+            role: roleRef.current.value,
           }),
         });
         mutate({ user: response.user }, false);
         toast.success('Your account has been created');
-        router.replace('/feed');
+        router.replace('/users');
       } catch (e) {
         toast.error(e.message);
       } finally {
@@ -52,7 +60,7 @@ const SignUp = () => {
   return (
     <Wrapper className={styles.root}>
       <div className={styles.main}>
-        <h1 className={styles.title}>Join Now</h1>
+        <h1 className={styles.title}>User Baru</h1>
         <form onSubmit={onSubmit}>
           <Container alignItems="center">
             <p className={styles.subtitle}>Your login</p>
@@ -100,6 +108,13 @@ const SignUp = () => {
             required
           />
           <Spacer size={1} axis="vertical" />
+          <Container alignItems="center">
+            <p className={styles.subtitle}>Roles</p>
+            <div className={styles.seperator} />
+          </Container>
+          <Spacer size={1} axis="vertical" />
+          <Select ref={roleRef} options={roles}></Select>
+          <Spacer size={1} axis="vertical" />
           <Button
             htmlType="submit"
             className={styles.submit}
@@ -107,17 +122,17 @@ const SignUp = () => {
             size="large"
             loading={isLoading}
           >
-            Sign up
+            Register
           </Button>
         </form>
       </div>
-      <div className={styles.footer}>
-        <Link href="/login" passHref>
+      {/* <div className={styles.footer}>
+        <Link href="/login" passHref legacyBehavior>
           <TextLink color="link" variant="highlight">
             Already have an account? Log in
           </TextLink>
         </Link>
-      </div>
+      </div> */}
     </Wrapper>
   );
 };

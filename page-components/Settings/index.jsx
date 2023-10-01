@@ -109,8 +109,8 @@ const Auth = () => {
 const AboutYou = ({ user, mutate }) => {
   const usernameRef = useRef();
   const nameRef = useRef();
-  const bioRef = useRef();
-  const profilePictureRef = useRef();
+  // const bioRef = useRef();
+  // const profilePictureRef = useRef();
 
   const [avatarHref, setAvatarHref] = useState(user.profilePicture);
   const onAvatarChange = useCallback((e) => {
@@ -133,10 +133,10 @@ const AboutYou = ({ user, mutate }) => {
         const formData = new FormData();
         formData.append('username', usernameRef.current.value);
         formData.append('name', nameRef.current.value);
-        formData.append('bio', bioRef.current.value);
-        if (profilePictureRef.current.files[0]) {
-          formData.append('profilePicture', profilePictureRef.current.files[0]);
-        }
+        // formData.append('bio', bioRef.current.value);
+        // if (profilePictureRef.current.files[0]) {
+        //   formData.append('profilePicture', profilePictureRef.current.files[0]);
+        // }
         const response = await fetcher('/api/user', {
           method: 'PATCH',
           body: formData,
@@ -155,9 +155,9 @@ const AboutYou = ({ user, mutate }) => {
   useEffect(() => {
     usernameRef.current.value = user.username;
     nameRef.current.value = user.name;
-    bioRef.current.value = user.bio;
-    profilePictureRef.current.value = '';
-    setAvatarHref(user.profilePicture);
+    // bioRef.current.value = user.bio;
+    // profilePictureRef.current.value = '';
+    // setAvatarHref(user.profilePicture);
   }, [user]);
 
   return (
@@ -167,10 +167,10 @@ const AboutYou = ({ user, mutate }) => {
         <Input ref={usernameRef} label="Your Username" />
         <Spacer size={0.5} axis="vertical" />
         <Input ref={nameRef} label="Your Name" />
+        {/* <Spacer size={0.5} axis="vertical" /> */}
+        {/* <Textarea ref={bioRef} label="Your Bio" /> */}
         <Spacer size={0.5} axis="vertical" />
-        <Textarea ref={bioRef} label="Your Bio" />
-        <Spacer size={0.5} axis="vertical" />
-        <span className={styles.label}>Your Avatar</span>
+        {/* <span className={styles.label}>Your Avatar</span>
         <div className={styles.avatar}>
           <Avatar size={96} username={user.username} url={avatarHref} />
           <input
@@ -181,7 +181,7 @@ const AboutYou = ({ user, mutate }) => {
             onChange={onAvatarChange}
           />
         </div>
-        <Spacer size={0.5} axis="vertical" />
+        <Spacer size={0.5} axis="vertical" /> */}
         <Button
           htmlType="submit"
           className={styles.submit}
@@ -209,7 +209,7 @@ export const Settings = () => {
       <Spacer size={2} axis="vertical" />
       {data?.user ? (
         <>
-          <EmailVerify user={data.user} />
+          {/* <EmailVerify user={data.user} /> */}
           <AboutYou user={data.user} mutate={mutate} />
           <Auth user={data.user} />
         </>
