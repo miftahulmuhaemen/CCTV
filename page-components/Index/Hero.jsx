@@ -16,6 +16,7 @@ const Hero = () => {
   return (
     <Wrapper>
       <div>
+        
         <h1 className={styles.title}>
           <span className={styles.nextjs}>Dashboard</span>
           <span className={styles.mongodb}>Monitoring</span>

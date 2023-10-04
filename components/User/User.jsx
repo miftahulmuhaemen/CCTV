@@ -3,7 +3,6 @@ import clsx from 'clsx';
 import styles from './Post.module.css';
 
 const User = ({ user, className }) => {
-  console.log(user)
   return (
     <div className={clsx(styles.root, className)}>
         <Container className={styles.creator}>

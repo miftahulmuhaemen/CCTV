@@ -1,23 +1,46 @@
-import { MongoClient } from 'mongodb';
+import { MongoClient, ObjectId } from 'mongodb';
+import bcrypt from 'bcryptjs';
 
 let indexesCreated = false;
 async function createIndexes(client) {
   if (indexesCreated) return client;
   const db = client.db();
+  const superAdminObjectID = new ObjectId('65159fdfb18da3ad9417fa9e');
+  const superAdminPassword = await bcrypt.hash(process.env.SUPERADMIN_PASSWORD, 10);
   await Promise.all([
     db
       .collection('tokens')
       .createIndex({ expireAt: -1 }, { expireAfterSeconds: 0 }),
-    db
-      .collection('posts')
-      .createIndexes([{ key: { createdAt: -1 } }, { key: { creatorId: -1 } }]),
-    db
-      .collection('comments')
-      .createIndexes([{ key: { createdAt: -1 } }, { key: { postId: -1 } }]),
     db.collection('users').createIndexes([
       { key: { email: 1 }, unique: true },
       { key: { username: 1 }, unique: true },
     ]),
+    db
+      .collection('roles')
+      .updateOne(
+      {
+        _id: superAdminObjectID,
+      },
+      { $set: {
+        _id: superAdminObjectID,
+        name: 'Superadmin'
+      }},
+      { upsert: true }),
+    db
+      .collection('users')
+      .updateOne(
+        {
+          name: 'Superadmin',
+        },
+        { $set: {
+          name: 'Superadmin',
+          email: process.env.SUPERADMIN_EMAIL,
+          name: 'Superadmin',
+          username: process.env.SUPERADMIN_USERNAME,
+          role: superAdminObjectID,
+          password: superAdminPassword,
+        }},
+      { upsert: true }),
   ]);
   indexesCreated = true;
   return client;

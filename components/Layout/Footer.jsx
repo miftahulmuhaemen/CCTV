@@ -14,6 +14,7 @@ const Footer = () => {
             Hoang Vo
           </TextLink>
           . */}
+          Powered By PT Surya Tekno Komputindo
         </Text>
         <Spacer size={1} axis="vertical" />
         {/* <ThemeSwitcher /> */}
