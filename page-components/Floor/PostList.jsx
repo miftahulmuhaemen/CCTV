@@ -7,7 +7,7 @@ import { useFloorPagesByBuilding } from '@/lib/floor';
 import Link from 'next/link';
 import styles from './PostList.module.css';
 
-const PostList = ({ building: building }) => {
+const PostList = ({ building }) => {
   const { data, size, setSize, isLoadingMore, isReachingEnd, mutate } = useFloorPagesByBuilding(
     { buildingId: building._id }
   );
