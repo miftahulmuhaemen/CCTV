@@ -1,5 +1,5 @@
 import { ValidateProps } from '@/api-lib/constants';
-import { findUserByUsername, updateUserById } from '@/api-lib/db';
+import { findUserByUsername, updateUserById, deleteUserById } from '@/api-lib/db';
 import { auths, validateBody } from '@/api-lib/middlewares';
 import { getMongoDb } from '@/api-lib/mongodb';
 import { ncOpts } from '@/api-lib/nc';
@@ -31,6 +31,18 @@ handler.get(async (req, res) => {
   if (!req.user) return res.json({ user: null });
   return res.json({ user: req.user });
 });
+
+handler.delete(async (req, res) => {
+  const db = await getMongoDb();
+  await deleteUserById(
+    db,
+    req.body.id
+  );
+
+  res.json({ 
+    status: '200',
+   });
+})
 
 handler.patch(
   upload.single('profilePicture'),

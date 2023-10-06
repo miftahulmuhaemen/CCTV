@@ -120,7 +120,16 @@ const Nav = () => {
           alignItems="center"
           justifyContent="space-between"
         >
-          <Container>
+          <Container 
+          alignItems="center"
+          justifyContent="space-between">
+            <img
+              // className={styles.item}
+              src={'/images/uhamka_short_logo.png'}
+              width={100}
+              height={'100%'}
+            />
+            <Spacer axis="horizontal" size={1} />
             {
               router.asPath !== '/' 
               ? <><Link href="/" onClick={() => router.back()} className={styles.logo}>

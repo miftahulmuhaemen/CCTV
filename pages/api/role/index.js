@@ -1,5 +1,5 @@
 import { ValidateProps } from '@/api-lib/constants';
-import { findBuildings, insertBuilding, deleteBuildingById } from '@/api-lib/db';
+import { findRoles, insertRole, updateRoleById} from '@/api-lib/db';
 import { auths, validateBody } from '@/api-lib/middlewares';
 import { getMongoDb } from '@/api-lib/mongodb';
 import { ncOpts } from '@/api-lib/nc';
@@ -7,34 +7,12 @@ import nc from 'next-connect';
 
 const handler = nc(ncOpts);
 
-handler.get(async (req, res) => {
-  const db = await getMongoDb();
-
-  const buildings = await findBuildings(
-    db,
-  );
-
-  res.json({ buildings });
-});
-
-handler.delete(async (req, res) => {
-  const db = await getMongoDb();
-  await deleteBuildingById(
-    db,
-    req.body.id
-  );
-
-  res.json({ 
-    status: '200',
-   });
-})
-
 handler.post(
   ...auths,
   validateBody({
     type: 'object',
     properties: {
-      name: ValidateProps.building.name,
+      name: ValidateProps.role.name,
     },
     required: ['name'],
     additionalProperties: false,
@@ -45,11 +23,11 @@ handler.post(
     }
 
     const db = await getMongoDb();
-    const building = await insertBuilding(db, {
+    const role = await insertRole(db, {
       name: req.body.name,
     });
 
-    return res.json({ building });
+    return res.json({ role });
   }
 );
 

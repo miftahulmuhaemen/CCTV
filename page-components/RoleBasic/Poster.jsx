@@ -6,42 +6,37 @@ import { LoadingDots } from '@/components/LoadingDots';
 import { Text, TextLink } from '@/components/Text';
 import { fetcher } from '@/lib/fetch';
 import { usePostPages } from '@/lib/post';
-import { useFloorWithBuildingPages } from '@/lib/floor';
+import { useFloorPages } from '@/lib/floor';
 import { Select } from '@/components/Select';
 import { useCurrentUser } from '@/lib/user';
 import Link from 'next/link';
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useState } from 'react';
 import toast from 'react-hot-toast';
 import styles from './Poster.module.css';
 
-const PosterInner = ({ role, buildings }) => {
-  const { data: floorPages } = useFloorWithBuildingPages();
-  const floors = floorPages
-    ? floorPages.reduce((acc, val) => [...acc, ...val.floors], [])
-    : [];
+const PosterInner = () => {
   const [isLoading, setIsLoading] = useState(false);
-  const [floor, setFloor] = useState('');
+  const [roleName, setRoleName] = useState('');
 
-  const handleFloorChange = (value) => {
-    setFloor(value);
+  const handleRoleNameChange = (e) => {
+    setRoleName(e.target.value);
   };
-
+  
   const { mutate } = usePostPages();
   const onSubmit = useCallback(
     async (e) => {
       e.preventDefault();
       try {
         setIsLoading(true);
-        await fetcher(`/api/roles/floors`, {
+        await fetcher(`/api/role`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            id: role._id, 
-            floorAccess: floor,
+          body: JSON.stringify({ 
+            name: roleName,
           }),
         });
-        toast.success('You have add new floor to the floor successfully');
-        setFloor(['']);
+        toast.success('You have insert new Floor successfully');
+        setRoleName('');
         mutate();
       } catch (e) {
         toast.error(e.message);
@@ -49,21 +44,24 @@ const PosterInner = ({ role, buildings }) => {
         setIsLoading(false);
       }
     },
-    [floor]
+    [roleName]
   );
 
   return (
     <form onSubmit={(e) => e.preventDefault()}>
       <Container className={styles.creator}>
         <div className={styles.formSection}>
-          <label className={styles.label}>Floor:</label>
-          <div className={styles.ipInputContainer}>
-                <Select className={styles.select} value={floor} onChange={(e) => handleFloorChange(e.target.value)} options={floors}></Select>
-          </div>
+          <label className={styles.label}>Role Name:</label>
+          <input
+            type="text"
+            className={styles.input}
+            value={roleName}
+            onChange={handleRoleNameChange}
+          />
         </div>
-        <div className={styles.buttonContainer}>
+        <div className={styles.buttonContainer}> 
           <Button type="success" loading={isLoading} onClick={onSubmit}>
-            Tambahkan Floor
+            Tambahkan Role
           </Button>
         </div>
       </Container>
@@ -71,7 +69,7 @@ const PosterInner = ({ role, buildings }) => {
   );
 };
 
-const Poster = ({ role, buildings }) => {
+const Poster = () => {
   const { data, error } = useCurrentUser();
   const loading = !data && !error;
 
@@ -81,7 +79,7 @@ const Poster = ({ role, buildings }) => {
         {loading ? (
           <LoadingDots>Loading</LoadingDots>
         ) : data?.user ? (
-          <PosterInner role={role} buildings={buildings}/>
+          <PosterInner user={data.user} />
         ) : (
           <Text color="secondary">
             Please{' '}

@@ -1,16 +1,16 @@
 import { ObjectId } from 'mongodb';
-export async function findBuildings(db, id) {
+export async function findBuildings(db) {
     return db
     .collection('buildings')
     .aggregate([
-      // {
-      //   $lookup: {
-      //     from: 'floors',
-      //     localField: '_id',
-      //     foreignField: 'buildingId',
-      //     as: 'floors',
-      //   },
-      // },
+      {
+        $lookup: {
+          from: 'floors',
+          localField: '_id',
+          foreignField: 'buildingId',
+          as: 'floors',
+        },
+      },
     ])
     .toArray();
 }
@@ -25,6 +25,12 @@ export async function findBuildingById(db, id) {
     .toArray();
   if (!buildings[0]) return null;
   return buildings[0];
+}
+
+export async function deleteBuildingById(db, id) {
+  return db
+    .collection('buildings')
+    .deleteOne({ '_id': ObjectId(id) })
 }
 
 export async function insertBuilding(db, { name }) {

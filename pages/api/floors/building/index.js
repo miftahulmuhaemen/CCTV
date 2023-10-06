@@ -10,24 +10,11 @@ const handler = nc(ncOpts);
 handler.get(async (req, res) => {
   const db = await getMongoDb();
 
-  const floors = await findFloors(
+  const floors = await findFloorsWithBuilding(
     db,
-    req.query.limit ? parseInt(req.query.limit, 10) : undefined
   );
 
   res.json({ floors });
 });
-
-handler.delete(async (req, res) => {
-  const db = await getMongoDb();
-  await deleteFloorById(
-    db,
-    req.body.id
-  );
-
-  res.json({ 
-    status: '200',
-   });
-})
 
 export default handler;

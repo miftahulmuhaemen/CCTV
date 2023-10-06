@@ -27,7 +27,7 @@ export const Select = forwardRef(function Select(
     >
       <option value="">Select an option</option>
       {options.map((option) => (
-        <option value={option._id}>{option.name}</option>
+        <option value={option._id}>{option.building.name} - {option.name}</option>
       ))}
     </select>
   );

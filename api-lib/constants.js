@@ -20,6 +20,7 @@ export const ValidateProps = {
     name: { type: 'string', minLength: 1, maxLength: 280 },
     buildingId: { type: 'string', minLength: 1, maxLength: 280 },
     cameraIPs: { type: 'array', minItems: 1, uniqueItems: true },
+    isFullSize: {},
   },
   role: {
     name: { type: 'string', minLength: 1, maxLength: 280 },

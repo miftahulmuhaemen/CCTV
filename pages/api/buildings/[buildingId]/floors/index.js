@@ -1,5 +1,5 @@
 import { ValidateProps } from '@/api-lib/constants';
-import { findFloorsByBuilding, insertFloor } from '@/api-lib/db';
+import { findFloorsByBuilding, insertFloor, updateFloorById } from '@/api-lib/db';
 import { auths, validateBody } from '@/api-lib/middlewares';
 import { getMongoDb } from '@/api-lib/mongodb';
 import { ncOpts } from '@/api-lib/nc';
@@ -19,6 +19,34 @@ handler.get(async (req, res) => {
   res.json({ floors });
 });
 
+handler.patch(...auths,
+  validateBody({
+    type: 'object',
+    properties: {
+      buildingId: ValidateProps.floor.buildingId,
+      cameraIPs: ValidateProps.floor.cameraIPs,
+      isFullSize: ValidateProps.floor.isFullSize,
+    },
+    required: ['name', 'buildingId', 'cameraIPs'],
+    additionalProperties: false,
+  }),
+  async (req, res) => {
+    if (!req.user) {
+      return res.status(401).end();
+    }
+
+    const db = await getMongoDb();
+    const floor = await updateFloorById(db, {
+      id: req.body.id,
+      name: req.body.name,
+      buildingId: req.body.buildingId,
+      cameraIPs: req.body.cameraIPs,
+      isFullSize: req.body.isFullSize,
+    });
+
+    return res.json({ floor });
+  });
+
 handler.post(
   ...auths,
   validateBody({
@@ -27,6 +55,7 @@ handler.post(
       name: ValidateProps.floor.name,
       buildingId: ValidateProps.floor.buildingId,
       cameraIPs: ValidateProps.floor.cameraIPs,
+      isFullSize: ValidateProps.floor.isFullSize,
     },
     required: ['name', 'buildingId', 'cameraIPs'],
     additionalProperties: false,
@@ -41,6 +70,7 @@ handler.post(
       name: req.body.name,
       buildingId: req.body.buildingId,
       cameraIPs: req.body.cameraIPs,
+      isFullSize: req.body.isFullSize,
     });
 
     return res.json({ floor });

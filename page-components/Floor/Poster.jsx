@@ -16,9 +16,14 @@ const PosterInner = ({ building, user }) => {
 
   const [isLoading, setIsLoading] = useState(false);
   const [floorName, setFloorName] = useState('');
+  const [isFullSize, setIsFullSize] = useState(false);
   const [ipList, setIpList] = useState([{ ip: '', name: '' }]);
   const handleFloorNameChange = (e) => {
     setFloorName(e.target.value);
+  };
+  
+  const handleIsFullSizeChange = (e) => {
+    setIsFullSize(e.target.checked);
   };
   
   const handleIpChange = (index, field, value) => {
@@ -50,6 +55,7 @@ const PosterInner = ({ building, user }) => {
             name: floorName,
             buildingId: building._id,
             cameraIPs: ipList,
+            isFullSize: isFullSize,
           }),
         });
         toast.success('You have insert new Floor successfully');
@@ -68,6 +74,14 @@ const PosterInner = ({ building, user }) => {
   return (
     <form onSubmit={(e) => e.preventDefault()}>
       <Container className={styles.creator}>
+        <div className={styles.formSection}>
+          {/* <label className={styles.label}>Is View Fullsize?:  */}
+          <label className={styles.checkbox}>Is the view in full-size?
+            <input type="checkbox" onChange={handleIsFullSizeChange}/>
+            <span class={styles.checkmark}></span>
+          </label>
+        {/* </label> */}
+        </div>
         <div className={styles.formSection}>
           <label className={styles.label}>Floor Name:</label>
           <input

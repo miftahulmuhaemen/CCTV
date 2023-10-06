@@ -5,13 +5,12 @@ import { useCallback, useState } from 'react';
 import styles from './Post.module.css';
 import toast from 'react-hot-toast';
 
-const Role = ({ role, className, mutate }) => {
-
+const RoleBasic = ({ role, className, mutate }) => {
   const onSubmit = useCallback(
     async (e) => {
       e.preventDefault();
       try {
-        await fetcher(`/api/roles`, {
+        await fetcher(`/api/roles/floors`, {
           method: 'DELETE',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ 
@@ -31,11 +30,6 @@ const Role = ({ role, className, mutate }) => {
         <Container className={styles.creator}>
           <Container column className={styles.meta}>
             <p className={styles.name}>{role.name}</p>
-            <ul className={styles.wordList}>
-              {role.floors.map((floor) => (
-                <li>{floor.name}</li>
-              ))}
-            </ul>
           </Container>
         </Container>
         <button
@@ -48,4 +42,4 @@ const Role = ({ role, className, mutate }) => {
   );
 };
 
-export default Role;
+export default RoleBasic;

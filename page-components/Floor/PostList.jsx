@@ -8,7 +8,7 @@ import Link from 'next/link';
 import styles from './PostList.module.css';
 
 const PostList = ({ building: building }) => {
-  const { data, size, setSize, isLoadingMore, isReachingEnd } = useFloorPagesByBuilding(
+  const { data, size, setSize, isLoadingMore, isReachingEnd, mutate } = useFloorPagesByBuilding(
     { buildingId: building._id }
   );
   const floors = data
@@ -21,7 +21,7 @@ const PostList = ({ building: building }) => {
       <Wrapper>
         {floors.map((floor) => (
             <div className={styles.wrap}>
-              <Floor className={styles.post} floor={floor} />
+              <Floor className={styles.post} floor={floor} mutate={mutate} />
             </div>
         ))}
         <Container justifyContent="center">

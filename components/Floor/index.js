@@ -1,1 +1,1 @@
-export { default as Floor } from './Floor';
+export { default as RoleFloor } from './RoleFloor';

@@ -153,6 +153,12 @@ export async function findUserByEmail(db, email) {
     .then((user) => user || null);
 }
 
+export async function deleteUserById(db, id) {
+  return db
+    .collection('users')
+    .deleteOne({ '_id': ObjectId(id) })
+}
+
 export async function updateUserById(db, id, data) {
   return db
     .collection('users')

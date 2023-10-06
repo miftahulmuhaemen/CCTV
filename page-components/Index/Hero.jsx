@@ -20,7 +20,7 @@ const Hero = () => {
         <h1 className={styles.title}>
           <span className={styles.nextjs}>Dashboard</span>
           <span className={styles.mongodb}>Monitoring</span>
-          <span>App</span>
+          <span>UHAMKA</span>
         </h1>
         {loading ? (
           <LoadingDots>Loading</LoadingDots>
@@ -33,25 +33,15 @@ const Hero = () => {
                 type="secondary"
                 className={styles.button}
               >
-                Open Floors
+                Open Cameras
               </ButtonLink>
             </Container>
           </Container>
-        ) : (
-          <Text color="secondary">
-            Please{' '}
-            <Link href="/login" passHref legacyBehavior>
-              <TextLink color="link" variant="highlight">
-                sign in
-              </TextLink>
-            </Link>{' '}
-            to post
-          </Text>
-        )}
+        ) : null}
         
-        <p className={styles.subtitle}>
+        {/* <p className={styles.subtitle}>
           Description.
-        </p>
+        </p> */}
       </div>
     </Wrapper>
   );

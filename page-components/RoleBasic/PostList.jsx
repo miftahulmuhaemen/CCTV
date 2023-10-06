@@ -1,36 +1,36 @@
 import { Button } from '@/components/Button';
 import { Container, Spacer } from '@/components/Layout';
 import Wrapper from '@/components/Layout/Wrapper';
-import { Building } from '@/components/Building';
+import { RoleBasic } from '@/components/Role';
 import { Text } from '@/components/Text';
-import { useBuildingPages } from '@/lib/building';
 import Link from 'next/link';
+import { useRolesPages } from '@/lib/roles';
 import styles from './PostList.module.css';
 
 const PostList = () => {
-  const { data, size, setSize, isLoadingMore, isReachingEnd, mutate } = useBuildingPages();
-  const buildings = data
-    ? data.reduce((acc, val) => [...acc, ...val.buildings], [])
+  const { data, size, setSize, isLoadingMore, isReachingEnd, mutate } = useRolesPages();
+  const roles = data
+    ? data.reduce((acc, val) => [...acc, ...val.roles], [])
     : [];
 
   return (
     <div className={styles.root}>
       <Spacer axis="vertical" size={1} />
       <Wrapper>
-        {buildings.map((building) => (
-            <Link
-              key={building._id}
-              href={`/building-detail/${building._id}`}
-              passHref
-              legacyBehavior>
-              <div className={styles.wrap}>
-                <Building className={styles.post} building={building} mutate={mutate} />
-              </div>
-            </Link>
+        {roles.map((role) => (
+        <Link
+          key={role._id}
+          href={`/role-detail/${role._id}`}
+          passHref
+          legacyBehavior>
+          <div className={styles.wrap}>
+            <RoleBasic  className={styles.post} role={role} mutate={mutate} />
+          </div>
+        </Link>
         ))}
         <Container justifyContent="center">
           {isReachingEnd ? (
-            <Text color="secondary">No more buildings are found</Text>
+            <Text color="secondary">No more roles are found</Text>
           ) : (
             <Button
               variant="ghost"

@@ -1,11 +1,11 @@
-import { Role } from '@/page-components/Role';
+import { Role } from '@/page-components/RoleBasic';
 import Head from 'next/head';
 
 const RolePage = () => {
   return (
     <>
       <Head>
-        <title>Feed</title>
+        <title>Role</title>
       </Head>
       <Role />
     </>

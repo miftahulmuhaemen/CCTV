@@ -8,7 +8,7 @@ import Link from 'next/link';
 import styles from './UserRegisterList.module.css';
 
 const PostList = () => {
-  const { data, size, setSize, isLoadingMore, isReachingEnd } = useUserPages();
+  const { data, size, setSize, isLoadingMore, isReachingEnd, mutate } = useUserPages();
   const users = data
     ? data.reduce((acc, val) => [...acc, ...val.users], [])
     : [];
@@ -19,7 +19,7 @@ const PostList = () => {
       <Wrapper>
         {users.map((user) => (
             <div className={styles.wrap}>
-              <User className={styles.post} user={user} />
+              <User className={styles.post} user={user} mutate={mutate} />
             </div>
         ))}
         <Container justifyContent="center">
