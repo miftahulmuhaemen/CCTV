@@ -1,7 +1,8 @@
 import { Spacer } from '@/components/Layout';
 import { Card } from '@/components/Card';
 import { CameraCard } from '@/components/Camera-Card';
-import { Container, Wrapper } from '@/components/Layout';
+import { CameraCardStandard } from '@/components/Camera-Standard';
+import { Container, Wrapper, FullWrapper } from '@/components/Layout';
 import styles from './Feed.module.css';
 import Poster from './Poster';
 import PostList from './PostList';
@@ -32,9 +33,15 @@ export const UserFloorCameras = ({ floor }) => {
   return (
     <div className={styles.root}>
       <Spacer size={1} axis="vertical" />
-      <Wrapper>
-        <CameraCard floor={floor}></CameraCard>
-      </Wrapper>
+      {
+        floor?.isFullSize
+        ? <FullWrapper>
+            <CameraCard floor={floor}></CameraCard>
+          </FullWrapper>
+        : <Wrapper>
+            <CameraCardStandard floor={floor}></CameraCardStandard>
+          </Wrapper>
+      }
       <Spacer size={1} axis="vertical" />
     </div>
   );

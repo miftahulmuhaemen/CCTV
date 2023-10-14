@@ -3,10 +3,10 @@ import clsx from 'clsx';
 import Link from 'next/link';
 import styles from './Post.module.css';
 
-const CameraCard = ({ floor, className }) => {
+const CameraCardStandard = ({ floor, className }) => {
   return (
     <div className={clsx(styles.root, className)}>
-        {/* <Container > */}
+        <Container >
             {/* <div className={styles.flexbox}> */}
               {floor.cameraIPs?.map((camera, index) => (
                   <div className={styles.card} key={index}>
@@ -23,9 +23,9 @@ const CameraCard = ({ floor, className }) => {
                   </div>
               ))}
             {/* </div> */}
-        {/* </Container> */}
+        </Container>
     </div>
   );
 };
 
-export default CameraCard;
+export default CameraCardStandard;

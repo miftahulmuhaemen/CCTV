@@ -4,8 +4,8 @@
   padding: 36px;
   background: var(--background);
   border: 1px solid var(--accents-2);
-  border-radius: 5px;
-  box-shadow: var(--shadow-smallest);
+  /* border-radius: 5px;
+  box-shadow: var(--shadow-smallest); */
 }
 
 .card {
@@ -15,12 +15,12 @@
   padding: 8px;
   box-sizing: border-box;
   text-align: center;
-  border-radius: 5px;
-  box-shadow: var(--shadow-smallest);
+  /* border-radius: 5px;
+  box-shadow: var(--shadow-smallest); */
 }
 
 .card:hover {
-  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2); /* Add a shadow on hover */
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2); 
 }
 
 .root a {
