@@ -28,9 +28,10 @@ const Hero = () => {
           <Container justifyContent="center" className={styles.buttons}>
             <Container>
               <ButtonLink
-            // href={`/user/${post.creator.username}/post/${post._id}`}
-                href={`/user/${data.user.username}/floors`}
+            href='http://129.150.43.231:12084'
+                // href={`/user/${data.user.username}/floors`}
                 type="secondary"
+                target={true}
                 className={styles.button}
               >
                 Open Cameras

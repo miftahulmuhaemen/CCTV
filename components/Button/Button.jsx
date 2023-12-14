@@ -36,7 +36,7 @@ export const Button = forwardRef(function Button(
 });
 
 export const ButtonLink = forwardRef(function Button(
-  { children, type, className, href, onClick, size, variant = 'invert' },
+  { children, type, className, href, onClick, size, variant = 'invert', target = false },
   ref
 ) {
   return (
@@ -48,6 +48,7 @@ export const ButtonLink = forwardRef(function Button(
         variant && styles[variant],
         className
       )}
+      target={target ? '_blank' : '_self'}
       ref={ref}
       href={href}
       onClick={onClick}

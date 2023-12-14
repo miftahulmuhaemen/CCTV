@@ -52,7 +52,7 @@ const Poster = ({building}) => {
             Please{' '}
             <Link href="/login" passHref legacyBehavior>
               <TextLink color="link" variant="highlight">
-                sign in as Administrator
+                Sign In
               </TextLink>
             </Link>{' '}
           </Text>
